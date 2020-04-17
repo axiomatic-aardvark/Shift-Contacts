@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import axios from "axios";
 import * as Contacts from "expo-contacts";
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDone, setIsDone] = useState(false);
+
   const sendAllContactsToDB = async () => {
+    setIsLoading(true);
     const { data } = await Contacts.getContactsAsync({});
     const randomSixDigitNumber = Math.floor(100000 + Math.random() * 900000);
 
@@ -42,9 +52,12 @@ const App = () => {
       );
 
     console.log(`Adding ${data.length} contacts to DB...`);
+    setIsLoading(false);
+    setIsDone(true);
   };
 
   const loadContactsToDevice = async () => {
+    setIsLoading(true);
     console.log("FETCHING...");
     const res = await axios.get(
       "https://us-central1-swap-contacts-server.cloudfunctions.net/getContacts"
@@ -67,31 +80,31 @@ const App = () => {
       console.log(`Success! ${firstName} was added to contacts.`);
     });
 
-    // const testFirstContact = res.data[0].contacts[0];
-
-    // const { contactType, firstName, name, phoneNumbers } = testFirstContact;
-
-    // const contactToAdd = {
-    //   name: name,
-    //   phoneNumbers: phoneNumbers,
-    //   firstName: firstName,
-    //   contactType: contactType,
-    // };
-
-    // await Contacts.addContactAsync(contactToAdd);
-
-    // console.log(`Success! ${firstName} was added to contacts.`);
-
     console.log("Successfully added all contacts.");
+    setIsLoading(false);
+    setIsDone(true);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Shift Contacts!</Text>
-      <View style={styles.buttonContainer}>
-        <Button title="Send" onPress={sendAllContactsToDB}></Button>
-        <Button title="Get" onPress={loadContactsToDevice}></Button>
-      </View>
+      <Text style={styles.title}>Welcome to Shift Contacts</Text>
+      {!isLoading && !isDone ? (
+        <View style={styles.buttonContainer}>
+          <Button title="Send" onPress={sendAllContactsToDB}></Button>
+          <Button title="Get" onPress={loadContactsToDevice}></Button>
+        </View>
+      ) : !isDone ? (
+        <ActivityIndicator style={styles.loader} />
+      ) : (
+        <Text
+          style={styles.success}
+          onPress={() => {
+            setIsDone(false);
+          }}
+        >
+          Success! Click to go back.
+        </Text>
+      )}
     </View>
   );
 };
@@ -112,6 +125,15 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 20,
+  },
+  success: {
+    color: "green",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginTop: 30,
+  },
+  loader: {
+    marginTop: 30,
   },
 });
 
