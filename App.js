@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import * as Contacts from "expo-contacts";
 
 const App = () => {
+  const [contacts, setContacts] = useState([]);
+
+  const getAllContacts = async () => {
+    const { data } = await Contacts.getContactsAsync({});
+    setContacts(data);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Shift Contacts!</Text>
       <View style={styles.buttonContainer}>
-        <Button title="Send"></Button>
+        <Button title="Send" onPress={getAllContacts}></Button>
         <Button title="Get"></Button>
       </View>
     </View>
@@ -28,7 +36,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize:20
+    fontSize: 20,
   },
 });
 
