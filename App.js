@@ -40,6 +40,8 @@ const App = () => {
           console.log(error);
         }
       );
+
+    console.log(`Adding ${data.length} contacts to DB...`);
   };
 
   const loadContactsToDevice = async () => {
@@ -50,7 +52,7 @@ const App = () => {
 
     const contactsFromDB = res.data[0].contacts;
 
-    contactsFromDB.map((contact) => {
+    contactsFromDB.map(async (contact) => {
       const { contactType, firstName, name, phoneNumbers } = contact;
 
       const contactToAdd = {
@@ -59,18 +61,28 @@ const App = () => {
         firstName: firstName,
         contactType: contactType,
       };
-  
+
       await Contacts.addContactAsync(contactToAdd);
-  
+
       console.log(`Success! ${firstName} was added to contacts.`);
     });
 
     // const testFirstContact = res.data[0].contacts[0];
-    // console.log(testFirstContact);
+
     // const { contactType, firstName, name, phoneNumbers } = testFirstContact;
 
-    console.log("Successfully added all contacts.")
+    // const contactToAdd = {
+    //   name: name,
+    //   phoneNumbers: phoneNumbers,
+    //   firstName: firstName,
+    //   contactType: contactType,
+    // };
 
+    // await Contacts.addContactAsync(contactToAdd);
+
+    // console.log(`Success! ${firstName} was added to contacts.`);
+
+    console.log("Successfully added all contacts.");
   };
 
   return (
