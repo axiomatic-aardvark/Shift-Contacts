@@ -8,6 +8,8 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-navigation/stack": "^5.2.10",
+    "axios": "^0.19.2",
     "expo": "~37.0.3",
     "expo-contacts": "~8.1.0",
     "react": "~16.9.0",
