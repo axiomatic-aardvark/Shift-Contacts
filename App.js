@@ -70,7 +70,7 @@ const App = () => {
 
     Alert.alert(
       `Your code is: ${randomSixDigitNumber}`,
-      "Please write down or memorize your code, you will need to enter it on the other device.",
+      "Please write down or memorize your code, you will need to enter it on the other device. Disclaimer: the code won't be active forever.",
       [
         {
           text: "OK",
@@ -142,8 +142,7 @@ const App = () => {
         contactType: contactType,
       };
 
-      // await Contacts.addContactAsync(contactToAdd);
-      // console.log(contactToAdd);
+      await Contacts.addContactAsync(contactToAdd);
 
       console.log(`Success! ${firstName} was added to contacts.`);
     });
